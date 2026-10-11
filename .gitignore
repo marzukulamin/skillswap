@@ -1,0 +1,11 @@
+/includes/config.local.php
+/assets/images/profiles/*
+!/assets/images/profiles/.gitkeep
+/.idea/
+/.vscode/
+/tmp/
+/.codex-remote-attachments/
+/SkillSwap_User_Credentials.docx
+.env
+.env.*
+!.env.example

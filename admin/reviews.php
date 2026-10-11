@@ -1,0 +1,8 @@
+<?php
+declare(strict_types=1);
+require_once __DIR__.'/../includes/auth.php';require_admin();require_once __DIR__.'/../includes/db.php';
+$reviews=$conn->query("SELECT r.*,s.title,reviewer.F_name AS reviewer_first,reviewer.L_name AS reviewer_last,owner.F_name AS owner_first,owner.L_name AS owner_last FROM `REVIEW` r JOIN `SESSION_BOOKING` sb ON sb.booking_id=r.booking_id JOIN `SKILL` s ON s.skill_id=sb.skill_id JOIN `USER` reviewer ON reviewer.user_id=r.user_id JOIN `USER` owner ON owner.user_id=s.user_id ORDER BY r.review_date DESC")->fetch_all(MYSQLI_ASSOC);
+$pageTitle='Reviews';require __DIR__.'/../includes/header.php';
+?>
+<section class="py-4 py-lg-5"><div class="container"><div class="mb-4"><div class="eyebrow text-primary mb-1">Feedback audit</div><h1 class="section-title h2">Reviews</h1></div><div class="row g-3"><?php if(!$reviews):?><div class="col-12"><div class="surface-card empty-state">No reviews yet.</div></div><?php endif;?><?php foreach($reviews as $review):?><div class="col-lg-6"><article class="surface-card p-4 h-100"><div class="d-flex justify-content-between gap-3"><div><div class="small text-secondary"><?=e($review['title'])?></div><h2 class="h6">For <?=e(trim($review['owner_first'].' '.$review['owner_last']))?></h2></div><span class="rating-stars"><?=str_repeat('★',(int)$review['rating'])?></span></div><p class="text-secondary mb-2"><?=e($review['comment']?:'No comment.')?></p><small class="text-secondary">By <?=e(trim($review['reviewer_first'].' '.$review['reviewer_last']))?> - <?=e(date('M j, Y',strtotime($review['review_date'])))?></small></article></div><?php endforeach;?></div></div></section>
+<?php require __DIR__.'/../includes/footer.php';?>
